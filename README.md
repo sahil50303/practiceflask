@@ -15,5 +15,24 @@ You create a Github Repository in your global then in your local you create a ne
 You initialize that same folder as a Git repository :-  git init (this has now created a github repository locally named FLASK_LEARN)
 
 # Step3
+You have to add a specific file only once adding a file sends that file into tracking mode 
+
+# Step4
+Rename your branch  :- git branch -M main
+
+# Step5
+Now all my code or anything will be commited in my this main branch and then this branch I will push it to my github repository 
+
+Now it is my decision will I put this branch as a main branch to Github or as a sub-branch
+
+# Step6
+Now tell the destination, where should this ciode go for that we give the link of the destination
+:- git remote add origin "repo URL"
+
+(Here above all i have done is created the destination folder)
+
+# Step7
+Last is to push the code
+
 
 
