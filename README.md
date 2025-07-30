@@ -32,7 +32,19 @@ Now tell the destination, where should this ciode go for that we give the link o
 (Here above all i have done is created the destination folder)
 
 # Step7
-Last is to push the code
+Last is to push the code 
+
+
+# New Changes 
+if there's any changes made in the code then add it so that it goes to the stagging then commit it then push the same
+
+1) add 
+2) commit
+3) push
+
+# Step8
+Now if you create a file through github Directly then you pull it in your local
+
 
 
 
