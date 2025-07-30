@@ -45,6 +45,16 @@ if there's any changes made in the code then add it so that it goes to the stagg
 # Step8
 Now if you create a file through github Directly then you pull it in your local
 
+# Step9
+.gitignore is the file wherein you put all the things which you don't want to send to the github now why would you not send a file to github , "because of its file size"
+eg you won't send your python package files to github so for that we use the .gitignore file 
+
+# Step10 (Most Important whenever you start a data science project)
+You always create an environment, why because all the things you do all the libraries should stay within that environment no extra libraries should be installed how do we create an environment 
+:- conda create -p venv python == version -y
+
+## git cheat sheet
+https://education.github.com/git-cheat-sheet-education.pdf
 
 
 
