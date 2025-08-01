@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>NSS AI Chatbot</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Roboto Mono', monospace;
+            background-color: #121212;
+            color: #ffffff;
+        }
+
+        header {
+            background-color: #1e1e1e;
+            padding: 20px;
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+            border-bottom: 2px solid #333;
+        }
+
+        .container {
+            display: flex;
+            height: calc(100vh - 80px);
+        }
+
+        .sidebar {
+            width: 25%;
+            padding: 20px;
+            background-color: #1f1f1f;
+            border-right: 2px solid #333;
+        }
+
+        .main {
+            width: 75%;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        textarea, input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            background-color: #2b2b2b;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            resize: none;
+        }
+
+        button {
+            margin-top: 10px;
+            padding: 10px;
+            background-color: #03dac6;
+            border: none;
+            border-radius: 5px;
+            color: #000;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .chat-window {
+            flex-grow: 1;
+            overflow-y: auto;
+            margin-bottom: 20px;
+            border: 1px solid #333;
+            padding: 10px;
+            background-color: #1a1a1a;
+            border-radius: 5px;
+        }
+
+        .chat-entry {
+            margin-bottom: 15px;
+        }
+
+        .chat-entry strong {
+            color: #03dac6;
+        }
+
+        .status {
+            color: #ff9800;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+
+        .form-section {
+            margin-top: 15px;
+        }
+    </style>
+</head>
+<body>
+    <header>This is your Personalized NSS Chat Bot</header>
+
+    <div class="container">
+        <!-- Sidebar for System Prompt -->
+        <div class="sidebar">
+            <h3>System Prompt</h3>
+            <form method="POST" action="/bot">
+                <input type="hidden" name="form_type" value="system">
+                <textarea name="system_message" rows="8">{{ system_prompt }}</textarea>
+                <button type="submit">Update</button>
+            </form>
+            {% if status_message %}
+                <p class="status">{{ status_message }}</p>
+            {% endif %}
+        </div>
+
+        <!-- Main Chat Area -->
+        <div class="main">
+            <!-- Chat Display -->
+            <div class="chat-window">
+                {% for message in chat_history %}
+                    <div class="chat-entry">
+                        <strong>You:</strong> {{ message.user }}<br>
+                        <strong>Bot:</strong> {{ message.bot }}
+                    </div>
+                {% endfor %}
+            </div>
+
+            <!-- Chat Input Form -->
+            <form method="POST" action="/bot">
+                <input type="hidden" name="form_type" value="chat">
+                <input type="text" name="user_input" placeholder="Type your message..." required />
+                <button type="submit">Send</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
