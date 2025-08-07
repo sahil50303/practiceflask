@@ -1,1 +1,6 @@
 Flask
+os
+glob
+pandas
+google.generativeai
+numpy
