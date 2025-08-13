@@ -1,8 +1,9 @@
-Flask
-pandas
-numpy
-pypyodbc
-google-generativeai
-requests
-reportlab
+
+flask==2.3.3
+pandas==2.0.3
+requests==2.31.0
+google-generativeai==0.7.2
+reportlab==4.0.4
+psycopg2-binary==2.9.7
+gunicorn==21.2.0
 
