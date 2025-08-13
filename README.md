@@ -57,4 +57,9 @@ You always create an environment, why because all the things you do all the libr
 https://education.github.com/git-cheat-sheet-education.pdf
 
 
+#### environment activate code:-
+cmd /K "C:\Users\Asus\anaconda3\condabin\conda.bat activate C:\Users\Asus\OneDrive\Desktop\Flask_learn\venv"
+
+
+
 

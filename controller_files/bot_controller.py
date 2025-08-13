@@ -1,6 +1,22 @@
 from app import app
 from flask import render_template, request
-from model_files.LLM_model import set_system_prompt, get_system_prompt
+from model_files.LLM_model import (
+    set_system_prompt,
+    get_system_prompt,
+    startup_prompt,
+    LLM_responder,
+    LLM_startup
+)
+
+# ---------------------- Warm up Gemini model at startup ----------------------
+print("🔄 Warming up Gemini model with FAQ data...")
+try:
+    response = LLM_startup(startup_prompt)
+    print("✅ Gemini model is ready to chat!")
+except Exception as e:
+    print(f"⚠️ Warmup failed: {e}")
+# -----------------------------------------------------------------------------
+
 
 @app.route("/bot", methods=["GET", "POST"])
 def Ai_bot():
@@ -13,21 +29,22 @@ def Ai_bot():
             new_prompt = request.form.get("system_message")
             set_system_prompt(new_prompt)
             status_message = "✅ System prompt updated successfully!"
-        
-
         else:
-            user_msg = request.form.get("user_input") 
+            user_msg = request.form.get("user_input")
+            # Response handling will come here later
             
 
     if request.method == "GET":
-        render_template("bot.html",system_prompt=get_system_prompt(),status_message=status_message)
-        
+        return render_template(
+            "bot.html",
+            system_prompt=get_system_prompt(),
+            status_message=status_message,
+            greeting="Jai Shree Krishna, how can I help you?"
+        )
 
-
-    # Always use the latest system prompt
+    # Fallback render
     return render_template(
         "bot.html",
         system_prompt=get_system_prompt(),
         status_message=status_message
     )
-

@@ -112,12 +112,21 @@
         <div class="main">
             <!-- Chat Display -->
             <div class="chat-window">
-                {% for message in chat_history %}
+                {% if chat_history and chat_history|length > 0 %}
+                    {% for message in chat_history|reverse %}
+                        <div class="chat-entry">
+                            {% if message.user %}
+                                <strong>You:</strong> {{ message.user }}<br>
+                            {% endif %}
+                            <strong>Bot:</strong> {{ message.bot }}
+                        </div>
+                    {% endfor %}
+                {% elif greeting %}
+                    <!-- First-time visit: just show greeting -->
                     <div class="chat-entry">
-                        <strong>You:</strong> {{ message.user }}<br>
-                        <strong>Bot:</strong> {{ message.bot }}
+                        <strong>Bot:</strong> {{ greeting }}
                     </div>
-                {% endfor %}
+                {% endif %}
             </div>
 
             <!-- Chat Input Form -->
@@ -127,6 +136,7 @@
                 <button type="submit">Send</button>
             </form>
         </div>
+
     </div>
 </body>
 </html>

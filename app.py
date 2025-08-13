@@ -13,7 +13,7 @@ def Home():
     return "This is my home Page"
 
 import controller_files.bot_controller as bot
-import controller_files.donations_controller as donations
+import controller_files.receipt_API as donations
 # To run in debug mode:
 #we run $env:FLASK_ENV = "development"  this is not working for now work as it is
 
