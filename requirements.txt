@@ -1,5 +1,4 @@
 Flask
-os
 glob
 pandas
 numpy
