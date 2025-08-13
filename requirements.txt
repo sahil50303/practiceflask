@@ -2,5 +2,8 @@ Flask
 os
 glob
 pandas
-google.generativeai
 numpy
+pypyodbc
+google-generativeai
+requests
+reportlab
