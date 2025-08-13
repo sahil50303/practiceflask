@@ -5,3 +5,4 @@ pypyodbc
 google-generativeai
 requests
 reportlab
+
