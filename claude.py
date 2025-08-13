@@ -11,10 +11,8 @@ from reportlab.lib.pagesizes import A4
 from reportlab.lib import colors
 from datetime import datetime
 
-# Setup logging for debug
 logging.basicConfig(level=logging.DEBUG, format='%(asctime)s %(levelname)s:%(message)s')
 
-# static elements
 server = '192.168.0.108,1433'
 database = 'test_receipt'  
 username = 'PRIII'
@@ -24,7 +22,6 @@ genai.configure(api_key=Gemini_APi_key)
 model_name = "gemini-1.5-flash"
 gemini_model = genai.GenerativeModel(model_name)
 
-# My memory to store everything
 sessions = {}
 
 conn_str = (
@@ -50,7 +47,7 @@ def generate_pdf(name, phone, donations, month, year, receipt_no):
     donations: list of dicts [{'date': 'YYYY-MM-DD', 'amount': 123.45}, ...]
     """
     try:
-        # Ensure PDF folder exists
+        
         if not os.path.exists(PDF_FOLDER):
             os.makedirs(PDF_FOLDER)
             logging.info(f"Created PDF folder: {PDF_FOLDER}")
@@ -226,7 +223,7 @@ def LLM_response(existing_parameters, last_message, user_message):
 
     try:
         response = gemini_model.generate_content(
-            full_prompt_text,  # Pass the string directly, not as a list of messages
+            full_prompt_text,  
             generation_config=genai.types.GenerationConfig(
                 temperature=0.3,
                 max_output_tokens=200,
@@ -237,7 +234,7 @@ def LLM_response(existing_parameters, last_message, user_message):
         required_element = response.text.strip()
         logging.debug(f"Raw LLM response: {required_element}")
         
-        # Try to extract JSON from the response (in case there's extra text)
+        
         json_start = required_element.find('{')
         json_end = required_element.rfind('}') + 1
         if json_start != -1 and json_end != 0:
@@ -266,14 +263,12 @@ def LLM_response(existing_parameters, last_message, user_message):
         }
 
 def call_llm_reply(last_message, user_message, known_params, pdf_url=None):
-    # This function can be extended to generate natural language reply, optionally including pdf url
-    # For now, just simple canned response
+
     if pdf_url:
-        # Get the actual server host and port from the request
-        # This will work better than hardcoding localhost
+
         reply = f"Here is your receipt: {pdf_url}"
     else:
-        reply = "Thank you for your message. How can I assist you further?"
+        reply = "Thank you for your message, but your receipt doesn't exist in our Database, is there anthing further I can assist you with ?"
     return reply
 
 app = Flask(__name__)
@@ -304,7 +299,6 @@ def ask():
 
     llm_result = LLM_response(sess["params"], last_message, message)
 
-    # DEBUGGING: log LLM result here
     logging.debug(f"LLM extracted parameters: {llm_result}")
 
     if "error" in llm_result:
@@ -316,16 +310,13 @@ def ask():
         logging.error(reply_text)
         return jsonify({"reply": reply_text})
 
-    # Update known parameters with LLM extracted data
     for key in ["name", "phone", "month", "year", "intent", "follow_up"]:
         if key in llm_result and llm_result[key] is not None:
             sess["params"][key] = llm_result[key]
 
-    # If follow_up needed, ask user for missing info
     if llm_result.get("follow_up"):
         reply_text = llm_result["follow_up"]
     else:
-        # If intent is receipt, generate PDF and reply with URL
         if llm_result.get("intent") == "receipt":
             try:
                 donations = query_database(
@@ -336,7 +327,6 @@ def ask():
                 )
                 
                 if donations:
-                    # Generate a dummy receipt number for demonstration
                     receipt_no = f"REC-{datetime.utcnow().strftime('%Y%m%d%H%M%S')}"
                     pdf_path = generate_pdf(
                         sess["params"]["name"],
@@ -348,7 +338,6 @@ def ask():
                     )
                     
                     if pdf_path and os.path.exists(pdf_path):
-                        # Use request.host_url to get the proper base URL
                         pdf_url = f"{request.host_url}download/{os.path.basename(pdf_path)}"
                         logging.info(f"Generated PDF URL: {pdf_url}")
                     else:
@@ -374,12 +363,10 @@ def ask():
 @app.route('/download/<filename>')
 def download_file(filename):
     try:
-        # Security check - ensure filename doesn't contain path traversal
         if '..' in filename or '/' in filename or '\\' in filename:
             logging.warning(f"Invalid filename attempt: {filename}")
             return jsonify({"error": "Invalid filename"}), 400
         
-        # Use absolute path for PDF folder
         abs_pdf_folder = os.path.abspath(PDF_FOLDER)
         file_path = os.path.join(abs_pdf_folder, filename)
         
@@ -387,16 +374,13 @@ def download_file(filename):
         logging.info(f"PDF folder: {abs_pdf_folder}")
         logging.info(f"File exists: {os.path.exists(file_path)}")
         
-        # Check if file exists
         if not os.path.exists(file_path):
             logging.error(f"File not found: {file_path}")
-            # List available files for debugging
             if os.path.exists(abs_pdf_folder):
                 available_files = os.listdir(abs_pdf_folder)
                 logging.info(f"Available files: {available_files}")
             return jsonify({"error": "File not found"}), 404
             
-        # Check file size
         file_size = os.path.getsize(file_path)
         logging.info(f"File size: {file_size} bytes")
         
