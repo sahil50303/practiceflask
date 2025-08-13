@@ -1,5 +1,4 @@
 Flask
-glob
 pandas
 numpy
 pypyodbc
